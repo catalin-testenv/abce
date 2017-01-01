@@ -1,0 +1,56 @@
+{
+  "name": "abce",
+  "version": "0.0.1",
+  "description": "AB Canvas Engine",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catalin-testenv/abce.git"
+  },
+
+  "author": "Catalin Enache",
+  "license": "MIT",
+  "homepage": "https://github.com/catalin-testenv/abce",
+  "dependencies": {
+    "lodash": "4.17.3"
+  },
+
+  "devDependencies": {
+    "babel-cli": "6.18.0",
+    "babel-core": "6.21.0",
+    "babel-polyfill": "6.20.0",
+    "babel-preset-babili": "0.0.9",
+    "babel-preset-env": "1.1.4",
+    "babel-preset-es2015": "6.16.0",
+    "babel-preset-react": "6.16.0",
+    "babelify": "7.3.0",
+    "babili": "0.0.9",
+    "browserify": "13.1.1",
+    "envify": "4.0.0",
+    "http-server": "latest",
+    "react": "15.4.1",
+    "react-dom": "15.4.1",
+    "uglify-js": "2.7.5"
+  },
+
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+
+  "scripts": {
+    "build-abce-deps": "browserify -r lodash -o demo/assets/js/abce-deps.js",
+    "build-abce-deps-min": "NODE_ENV=production browserify -r lodash -t [ envify purge --NODE_ENV production ] | uglifyjs --screw-ie8 --compress=unused,dead_code -o demo/assets/js/abce-deps.min.js",
+
+    "build-abce": "NODE_PATH=./src browserify -x lodash -r abce -o dist/abce.js ",
+    "build-abce-min": "NODE_ENV=production NODE_PATH=./src browserify -x lodash -r abce -t [ envify purge --NODE_ENV production ] | uglifyjs --screw-ie8 --compress=unused,dead_code -o dist/abce.min.js",
+
+    "build-demo-deps": "browserify -r react -r react-dom -o demo/assets/js/demo-deps.js",
+    "build-demo-deps-min": "NODE_ENV=production browserify -r react -r react-dom -t [ envify purge --NODE_ENV production ] | uglifyjs --screw-ie8 --compress=unused,dead_code -o demo/assets/js/demo-deps.min.js",
+
+    "build-demo": "NODE_PATH=./demo/src/js browserify -x lodash -x abce -x react -x react-dom -o demo/assets/js/demo.js demo/src/js/demo.js",
+    "build-demo-min": "NODE_ENV=production NODE_PATH=./demo/src/js browserify -x lodash -x abce -x react -x react-dom -t [ envify purge --NODE_ENV production ] demo/src/js/demo.js | uglifyjs --screw-ie8 --compress=unused,dead_code -o demo/assets/js/demo.min.js",
+
+    "serve": "node node_modules/http-server/bin/http-server -a 0.0.0.0 -p 8002 -c-1"
+  }
+}

@@ -1,0 +1,45 @@
+
+1.
+uglify-js throws error when using "babel-preset-env" because the resulted input contains es6 stuff.
+In order to work around this you can swap "babel-preset-env" with "es2015"
+at the cost of polyfilling too much.
+
+a. (when uglifyjs will support es6 input this config should be preferred)
+{
+  "plugins": [],
+  "presets": [
+    "react",
+    ["env", {
+      "targets": {
+        "chrome": 55
+      },
+      "debug": true,
+      "include": [],
+      "exclude": [],
+      "useBuiltIns": true,
+      "modules": "commonjs"
+    }]
+  ]
+}
+
+b. (using this config until uglifyjs will support es6 input as "babili" (babel minifier) is not yet well tested)
+{
+  "plugins": [],
+  "presets": [
+    "react", "es2015"
+  ]
+}
+
+2.
+This code:
+if ("production" !== process.env.NODE_ENV) {
+    console.log('not production')
+}
+in production, is transformed by "envify purge --NODE_ENV production" into:
+if ("production" !== "production") {
+    console.log('not production')
+}
+which is further removed altogether by: "uglifyjs --compress=unused,dead_code"
+
+3.
+http://stackoverflow.com/questions/29222745/how-do-i-exclude-the-requirereact-from-my-browserified-bundle
